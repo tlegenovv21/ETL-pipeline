@@ -1,0 +1,6 @@
+streamlit==1.22.0
+pandas==2.0.0
+pymongo==4.3.3
+minio==7.1.13
+matplotlib==3.7.1
+plotly==5.14.1
