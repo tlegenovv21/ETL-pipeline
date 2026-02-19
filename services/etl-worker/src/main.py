@@ -47,7 +47,7 @@ def run_pipeline():
     wiki_trans = TextTransformer()
     
     # Let's extract an article related to your major
-    raw_wiki = wiki_ext.extract("Cybersecurity") 
+    raw_wiki = wiki_ext.extract("Computer_security")
     if raw_wiki:
         # Save raw JSON
         minio.load_raw(f"wikipedia/{raw_wiki['title']}_raw.json", raw_wiki)

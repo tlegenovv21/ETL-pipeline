@@ -14,6 +14,8 @@ class WikipediaExtractor(BaseExtractor):
         
         url = f"{self.base_url}{topic}"
         
+        headers = {"User-Agent": "DataEngineerInternTask/1.0 (NITEC Junior DE Task)"}
+
         # Using a lambda to pass the request to safe_request
         response = self.safe_request(requests.get, url)
         

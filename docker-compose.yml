@@ -151,6 +151,7 @@ services:
       - MINIO_ACCESS_KEY=${MINIO_ROOT_USER}
       - MINIO_SECRET_KEY=${MINIO_ROOT_PASSWORD}
       - MONGO_URI=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongo:27017/
+      - UNSPLASH_ACCESS_KEY=${UNSPLASH_ACCESS_KEY}
     volumes:
       - ./services/etl-worker/src:/app/src
       - ./data:/app/data

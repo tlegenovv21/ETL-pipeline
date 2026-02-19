@@ -12,18 +12,15 @@ class ImageTransformer(BaseTransformer):
         image_url = data['url']
         
         try:
-            # Download image into memory (not to disk)
+            # Download image into memory
             response = requests.get(image_url, timeout=10)
             response.raise_for_status()
             img_bytes = BytesIO(response.content)
             
             # Open with Pillow for processing
             with Image.open(img_bytes) as img:
-                # 1. Extract dimensions and format
                 width, height = img.size
                 img_format = img.format or "JPEG"
-                
-                # 2. Generate Hash (phash detects visually similar images)
                 img_hash = str(imagehash.phash(img))
 
             specific_metadata = {
@@ -34,7 +31,6 @@ class ImageTransformer(BaseTransformer):
                 "description": data.get("description"),
                 "photographer": data.get("photographer")
             }
-
             # Return using the unified schema
             return self.unify_metadata(
                 raw_id=data.get("id"),
@@ -45,5 +41,6 @@ class ImageTransformer(BaseTransformer):
             )
 
         except Exception as e:
+            # The typo was likely here! It should be 'e', not 'earr'
             print(f"Failed to transform image {image_url}: {e}")
             return None
