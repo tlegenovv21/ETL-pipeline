@@ -28,3 +28,4 @@ class UnsplashExtractor(BaseExtractor):
         else:
             logger.warning("Failed to fetch Unsplash data")
             return []
+        

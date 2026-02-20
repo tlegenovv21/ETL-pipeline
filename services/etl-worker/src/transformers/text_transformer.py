@@ -30,7 +30,7 @@ class TextTransformer(BaseTransformer):
         specific_metadata = {
             "language": language,
             "word_count": len(tokens),
-            "top_tokens": tokens[:10], # Store first 10 tokens as a sample
+            "tokens": tokens[:10], # Store first 10 tokens as a sample
             "original_title": data.get("title")
         }
 

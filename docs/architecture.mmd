@@ -1,0 +1,24 @@
+graph TD
+    subgraph Extract Phase
+        A[Wikipedia API] -->|JSON| E[Python Extractors]
+        B[Unsplash API] -->|JSON| E
+        C[Synthetic Logs] -->|Text| E
+    end
+
+    subgraph Transform Phase
+        E -->|Raw Data| T[Python Transformers]
+        T -->|Clean Text & langdetect| U[Unified Metadata Schema]
+        T -->|Image Hash & PIL| U
+        T -->|Regex Parsed Logs| U
+    end
+
+    subgraph Load Phase
+        E -.->|Save Raw Output| M1[(MinIO: raw-data)]
+        U -->|Save Metadata JSON| DB[(MongoDB: metadata)]
+        U -->|Save Processed Files| M2[(MinIO: processed-data)]
+    end
+
+    subgraph Analytics Phase
+        DB -->|Query Metadata| S[Streamlit Dashboard]
+        M2 -->|Fetch Images| S
+    end
