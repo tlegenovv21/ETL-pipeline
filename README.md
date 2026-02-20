@@ -4,38 +4,10 @@ A fully containerized Data Engineering pipeline that extracts unstructured data 
 
 ---
 
-## 1. Architecture Schema
+### Dashboard Overview
+Below is a snapshot of the Streamlit analytics interface, displaying the distribution of processed data types and the top 10 most frequent words extracted from our text sources.
 
-```mermaid
-graph TD
-    %% Extract Phase
-    subgraph Extract Phase
-        A[Wikipedia API] -->|JSON| E[Python Extractors]
-        B[Unsplash API] -->|JSON| E
-        C[Synthetic Logs] -->|Text| E
-    end
-
-    %% Transform Phase
-    subgraph Transform Phase
-        E -->|Raw Data| T[Python Transformers]
-        T -->|Clean Text & langdetect| U[Unified Metadata Schema]
-        T -->|Image Hash & PIL| U
-        T -->|Regex Parsed Logs| U
-    end
-
-    %% Load Phase
-    subgraph Load Phase
-        E -.->|Save Raw Output| M1[(MinIO: raw-data)]
-        U -->|Save Metadata JSON| DB[(MongoDB: metadata)]
-        U -->|Save Processed Files| M2[(MinIO: processed-data)]
-    end
-
-    %% Analytics Phase
-    subgraph Analytics Phase
-        DB -->|Query Metadata| S[Streamlit Dashboard]
-        M2 -->|Fetch Images| S
-    end
----
+![Analytics Dashboard](dashboard.jpg)
 
 ## 2. Access the Web Interfaces
 Once the containers are running, you can access the three main UI components. Below are the default local credentials (configurable via `.env`).
@@ -58,5 +30,28 @@ Once the containers are running, you can access the three main UI components. Be
 * **What to look for:** Click on "Object Browser" in the left menu to explore the files saved inside the `raw-data` and `processed-data` buckets.
 
 
-![Analytics Dashboard]
-(dashboard.jpg)
+## Architecture Schema
+
+```mermaid
+graph TD
+    subgraph Extract
+        A[Wikipedia API] --> E[Python Extractors]
+        B[Unsplash API] --> E
+        C[Synthetic Logs] --> E
+    end
+
+    subgraph Transform
+        E -->|Raw Data| T[Transformers]
+        T -->|Clean & Parse| U[Unified Metadata Schema]
+    end
+
+    subgraph Load
+        E -.->|Save Raw| M1[(MinIO: raw-data)]
+        U -->|Save JSON| DB[(MongoDB: metadata)]
+        U -->|Save Processed| M2[(MinIO: processed-data)]
+    end
+
+    subgraph Analytics
+        DB -->|Query| S[Streamlit Dashboard]
+        M2 -->|Fetch Images| S
+    end
